@@ -3,19 +3,58 @@ import './App.css';
 import Card from './components/Card';
 import Header from './components/Header'
 import Cart from "./components/Cart";
+import React, {useState} from "react";
 
-const arr = [{title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 12999, imageUrl:'img/sneakers/1.jpg'},
-            {title: 'Мужские Кроссовки Nike Air Max 270', price: 15600, imageUrl:'img/sneakers/2.jpg'},
-            {title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 8499, imageUrl:'img/sneakers/3.png'},
-            {title: 'Кроссовки Puma X Aka Boku Future Rider', price: 8999, imageUrl:'img/sneakers/4.jpg'},
-            {title: 'Мужские Кроссовки Under Armour Curry 8', price: 15199, imageUrl:'img/sneakers/5.png'}]
 
 function App() {
+    const [items, setItems] = React.useState([
+        {
+            "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+            "price": 12999,
+            "imageUrl":"img/sneakers/1.jpg"
+        },
+        {
+            "title": "Мужские Кроссовки Nike Air Max 270",
+            "price": 15600,
+            "imageUrl":"img/sneakers/2.jpg"
+        },
+        {
+            "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+            "price": 8499,
+            "imageUrl":"img/sneakers/3.png"
+        },
+        {
+            "title": "Кроссовки Puma X Aka Boku Future Rider",
+            "price": 8999,
+            "imageUrl":"img/sneakers/4.jpg"
+        },
+        {
+            "title": "Мужские Кроссовки Under Armour Curry 8",
+            "price": 15199,
+            "imageUrl":"img/sneakers/5.png"
+        }
+    ])
+
+    const [cartItems, setCartItems] = React.useState([])
+
+
+    const [cartOpened, setCartOpened] = useState(false)
+
+
+    const onAdd2Cart = (obj) => {
+        if (obj in cartItems) {
+            alert('Товар уже добавлен в корзину')
+        } else {
+            setCartItems(prev => [...prev, obj])
+        }
+    }
+
     return (
         <div className="wrapper clear">
-            <Cart />
 
-            <Header />
+            { cartOpened && <Cart onClose={() => setCartOpened(false)} items={cartItems} />}
+
+            <Header onClickCart={() => setCartOpened(true)} />
 
             <div className="content p-40">
 
@@ -28,9 +67,14 @@ function App() {
                 </div>
 
 
-                <div className="d-flex">
-                    {arr.map((obj) =>
-                        <Card title={obj.title} price={obj.price} imageUrl={obj.imageUrl}
+                <div className="d-flex flex-wrap">
+                    {items.map((item) =>
+                        <Card
+                            title={item.title}
+                            price={item.price}
+                            imageUrl={item.imageUrl}
+                            onClickPlus={(obj) => onAdd2Cart(obj)}
+                            onClickFavorite={(obj) => console.log(obj)}
                     />)}
 
 

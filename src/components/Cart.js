@@ -1,24 +1,32 @@
 import React from 'react';
 
-export default function Cart() {
+export default function Cart({ onClose, items=[]}) {
     return (
-        <div style={{ display: 'none' }} className="overlay">
+
+        <div  className="overlay">
+
         <div className="right-bar">
-            <h2 className="mb-30">Корзина</h2>
+            <h2 className="mb-30 d-flex justify-between">
+                Корзина
+                <img className="cu-p" src="/img/remove_btn.svg" alt="close" onClick={onClose}/>
+            </h2>
 
             <div className="items">
 
-                <div className="cart-item d-flex align-center">
-                    <img className="mr-20" src="/img/sneakers/1.jpg" alt="sneakers" width={70} height={70}/>
+                {
+                    items.map((obj) => (
+                        <div className="cart-item d-flex align-center mb-20">
 
-                    <div style={{backgroundImage: 'url(/img/sneakers.1.jpg)'}} className="cart-item-img"></div>
-                    <div className="mr-20 flex">
-                        <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-                        <b>12 999 руб.</b>
-                    </div>
-                    <img className="remove-btn" src="/img/remove_btn.svg" alt="remove"/>
+                            <div style={{backgroundImage: `url(${obj.imageUrl})`}} className="cart-item-img"></div>
+                            <div className="mr-20 flex">
+                                <p className="mb-5">{obj.title}</p>
+                                <b>{obj.price} руб.</b>
+                            </div>
+                            <img className="remove-btn" src="/img/remove_btn.svg" alt="remove" onClick={() => alert('remove')}/>
 
-                </div>
+                        </div>
+                    ))
+                }
 
             </div>
 
