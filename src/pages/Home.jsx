@@ -27,10 +27,10 @@ export default function Home({items, searchValue, setSearchValue, onChangeSearch
             <div className="d-flex align-center mb-40 justify-between">
                 <h1 className="">{searchValue ? `Поиск по запросу "${searchValue}"` : 'Все кроссовки'}</h1>
                 <div className="search-block">
-                    <img src="/img/search.svg" alt="serch"/>
+                    <img src="img/search.svg" alt="serch"/>
                     <img
                         className="clear cu-p"
-                        src="/img/remove_btn.svg"
+                        src="img/remove_btn.svg"
                         alt="clear"
                         onClick={() => setSearchValue('')}/>
                     <input placeholder="Поиск..." value={searchValue} onChange={onChangeSearchInput}/>

@@ -43,7 +43,7 @@ export default function Cart({ onClose, onRemove, opened, items=[]}) {
         <div className={styles.rightBar}>
             <h2 className="mb-30 d-flex justify-between">
                 Корзина
-                <img className="cu-p" src="/img/remove_btn.svg" alt="close" onClick={onClose}/>
+                <img className="cu-p" src="img/remove_btn.svg" alt="close" onClick={onClose}/>
             </h2>
 
 
@@ -61,7 +61,7 @@ export default function Cart({ onClose, onRemove, opened, items=[]}) {
                                         <p className="mb-5">{obj.title}</p>
                                         <b>{obj.price} руб.</b>
                                     </div>
-                                    <img className="remove-btn" src="/img/remove_btn.svg" alt="remove" onClick={() => onRemove(obj.id)}/>
+                                    <img className="remove-btn" src="img/remove_btn.svg" alt="remove" onClick={() => onRemove(obj.id)}/>
 
                                 </div>
                             ))
@@ -83,14 +83,14 @@ export default function Cart({ onClose, onRemove, opened, items=[]}) {
                             </li>
                         </ul>
 
-                        <button disabled={isLoading} className="green-btn" onClick={ onClickMakeOrder }>Оформить заказ  <img src="/img/arrow.svg" alt="arrow"/> </button>
+                        <button disabled={isLoading} className="green-btn" onClick={ onClickMakeOrder }>Оформить заказ  <img src="img/arrow.svg" alt="arrow"/> </button>
                     </div>
                     </>
                     :
                     <Info
                         title={isOrderCompleted ? `Заказ успешно оформлен!` : "Корзина пуста"}
                         description={isOrderCompleted ? `Вы можете увидеть статус заказа #${orderId} в личном кабинете` : "Добавьте хотя бы одну пару обуви, чтобы сделать заказ"}
-                        image={isOrderCompleted ? "/img/order-completed.jpg" : "/img/empty-cart.png"}
+                        image={isOrderCompleted ? "img/order-completed.jpg" : "img/empty-cart.png"}
                     />
             }
 
