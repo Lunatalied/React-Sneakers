@@ -7,6 +7,7 @@ import {Route, Routes} from 'react-router-dom'
 import Home from './pages/Home'
 import Favorites from "./pages/Favorites";
 import AppContext from "./context";
+import Orders from "./pages/Orders";
 
 
 function App() {
@@ -19,16 +20,25 @@ function App() {
 
     React.useEffect(() => {
         async function fetchData() {
-            setIsLoading(true)
-            const cartItemsResp = await axios.get('https://63c97c45904f040a965f501f.mockapi.io/cart')
-            const favoritesResp = await axios.get('https://63ca7be6f36cbbdfc7594244.mockapi.io/favorites')
-            const itemsResp = await axios.get('https://63c97c45904f040a965f501f.mockapi.io/items')
 
-            setIsLoading(false)
+            try {
+                setIsLoading(true)
+                const [ cartItemsResp, favoritesResp, itemsResp ] = await Promise.all([
+                    axios.get('https://63c97c45904f040a965f501f.mockapi.io/cart'),
+                    axios.get('https://63ca7be6f36cbbdfc7594244.mockapi.io/favorites'),
+                    axios.get('https://63c97c45904f040a965f501f.mockapi.io/items')
+                ])
 
-            setCartItems(cartItemsResp.data)
-            setFavorites(favoritesResp.data)
-            setItems(itemsResp.data)
+                setIsLoading(false)
+
+                setCartItems(cartItemsResp.data)
+                setFavorites(favoritesResp.data)
+                setItems(itemsResp.data)
+
+            } catch (error) {
+                alert('Ошибка при запросе данных')
+            }
+
         }
 
         fetchData()
@@ -38,9 +48,10 @@ function App() {
     const onAdd2Cart = async (obj) => {
 
         try {
-            if (cartItems.find((cartObj) => Number(cartObj.id) === Number(obj.id))) {
-                await axios.delete(`https://63c97c45904f040a965f501f.mockapi.io/cart/${Number(obj.id)}`)
-                setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)))
+            const findItem = cartItems.find((cartObj) => Number(cartObj.parentId) === Number(obj.id))
+            if (findItem) {
+                setCartItems((prev) => prev.filter((item) => Number(item.parentId) !== Number(obj.id)))
+                await axios.delete(`https://63c97c45904f040a965f501f.mockapi.io/cart/${findItem.id}`)
             } else {
                 const {data} = await axios.post('https://63c97c45904f040a965f501f.mockapi.io/cart', obj)
                 setCartItems((prev) => [...prev, data])
@@ -51,8 +62,13 @@ function App() {
     }
 
     const onRemoveItem = async (id) => {
-        await axios.delete(`https://63c97c45904f040a965f501f.mockapi.io/cart/${Number(id)}`)
-        setCartItems((prev) => prev.filter((item) => item.id !== id))
+        try {
+            await axios.delete(`https://63c97c45904f040a965f501f.mockapi.io/cart/${Number(id)}`)
+            setCartItems((prev) => prev.filter((item) => Number(item.parentId) !== Number(id)))
+        } catch (error) {
+            alert("Не удалось удалить товар из корзины")
+        }
+
     }
 
     const onChangeSearchInput = (event) => {
@@ -76,14 +92,23 @@ function App() {
     }
 
     const isItemAdded = (id) => {
-        return cartItems.some((obj) => Number(obj.id) === Number(id))
+        return cartItems.some((obj) => Number(obj.parentId) === Number(id))
     }
 
     return (
-        <AppContext.Provider value={{cartItems, favorites, items, isItemAdded, onAdd2Favorite, setCartOpened, setCartItems}}>
+        <AppContext.Provider value={{
+            cartItems,
+            favorites,
+            items,
+            isItemAdded,
+            onAdd2Favorite,
+            onAdd2Cart,
+            setCartOpened,
+            setCartItems}}>
+
             <div className="wrapper clear">
 
-            { cartOpened && <Cart onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem} />}
+                <Cart onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem} opened={cartOpened} />
 
             <Header onClickCart={() => setCartOpened(true)} />
 
@@ -104,6 +129,10 @@ function App() {
 
                 <Route path="/favorites" exact element={
                     <Favorites />}>
+                </Route>
+
+                <Route path="/orders" exact element={
+                    <Orders />}>
                 </Route>
             </Routes>
 

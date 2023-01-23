@@ -1,17 +1,20 @@
 import React from 'react';
-import Info from "./Info";
-import AppContext from "../context";
 import axios from "axios";
+
+import Info from "../Info";
+import {useCart} from "../../hooks/useCart";
+
+import styles from './Cart.module.scss'
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 1000))
 
-export default function Cart({ onClose, onRemove, items=[]}) {
+export default function Cart({ onClose, onRemove, opened, items=[]}) {
 
-    const { cartItems, setCartItems } = React.useContext(AppContext)
-
+    const { cartItems, setCartItems, totalPrice } = useCart()
     const [orderId, setOrderId] = React.useState(null)
     const [isOrderCompleted, setIsOrderCompleted] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
+
 
     const onClickMakeOrder = async () => {
         try {
@@ -35,9 +38,9 @@ export default function Cart({ onClose, onRemove, items=[]}) {
 
     return (
 
-        <div  className="overlay">
+        <div  className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
 
-        <div className="right-bar">
+        <div className={styles.rightBar}>
             <h2 className="mb-30 d-flex justify-between">
                 Корзина
                 <img className="cu-p" src="/img/remove_btn.svg" alt="close" onClick={onClose}/>
@@ -47,7 +50,7 @@ export default function Cart({ onClose, onRemove, items=[]}) {
             {
                 items.length > 0 ?
                     <>
-                    <div className="items">
+                    <div className="items flex">
 
                         {
                             items.map((obj) => (
@@ -71,12 +74,12 @@ export default function Cart({ onClose, onRemove, items=[]}) {
                             <li className="d-flex">
                                 <span>Итого:</span>
                                 <div></div>
-                                <b>1111 руб.</b>
+                                <b>{totalPrice} руб.</b>
                             </li>
                             <li className="d-flex">
                                 <span>Налог 5%:</span>
                                 <div></div>
-                                <b>888 руб.</b>
+                                <b>{totalPrice * 0.05} руб.</b>
                             </li>
                         </ul>
 

@@ -77,31 +77,6 @@ h5 {
   }
 }
 
-.overlay {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-
-
-  .right-bar {
-    position: absolute;
-    width: 470px;
-    height: 100%;
-    right: 0;
-    top: 0;
-    background: #FFFFFF;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-
-    h2 {
-      margin: 0;
-    }
-
     .cart-empty {
 
       .green-btn-back {
@@ -218,7 +193,6 @@ h5 {
         }
       }
     }
-  }
 
 
   .green-btn-back {
@@ -260,7 +234,7 @@ h5 {
       transition: transform 0.15s ease-in-out;
     }
   }
-}
+
 
 @keyframes button-loading {
   0% {
