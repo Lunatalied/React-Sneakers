@@ -11,7 +11,7 @@ export default function Info( { title, description, image } ) {
         <h2>{ title }</h2>
         <p className="opacity-6 text-center">{ description }</p>
         <button className="green-btn-back" onClick={() => setCartOpened(false)}>
-            <img src="/img/arrow.svg" alt="Arrow"/>
+            <img src="img/arrow.svg" alt="Arrow"/>
             Вернуться к покупкам
         </button>
     </div>
